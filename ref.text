@@ -1,0 +1,83 @@
+https://www.analyticsvidhya.com/blog/2023/02/what-are-data-access-object-and-data-transfer-object-in-python/%20orm_
+
+pip install redis
+
+Docker Desktop installation on Windows done & shortcut icon @ Desktop
+
+docker ps  - > to check if docker is running or not 
+
+PS C:\Users\nhari\Documents\workspace-spring-tool-suite-4-4.19.0.RELEASE\design pattern eav_mvc_dao_dto> docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS              PORTS                    NAMES
+6fb96569eda6   redis     "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:6379->6379/tcp   some-redis
+
+pip install mysql-connector-python
+PS C:\Users\nhari\Documents\workspace-spring-tool-suite-4-4.19.0.RELEASE\design pattern eav_mvc_dao_dto> mysql -u root -p
+Enter password: ******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.23 MySQL Community Server - GPL
+Copyright (c) 2000, 2021, Oracle and/or its affiliates. All rights reserved.
+mysql> create DataBASE design_pattern;
+Query OK, 1 row affected (0.01 sec)
+mysql> use design_pattern;
+Database changed
+mysql> CREATE TABLE students (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     school VARCHAR(255),
+    ->     student_name VARCHAR(255)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+DELETE FROM `design_pattern`.`students` WHERE (`id` = '2');
+DELETE FROM `design_pattern`.`students` WHERE (`id` = '4');
+DELETE FROM `design_pattern`.`students` WHERE (`id` = '6');
+DELETE FROM `design_pattern`.`students` WHERE (`id` = '8');
+UPDATE `design_pattern`.`students` SET `student_name` = 'HKS' WHERE (`id` = '10');
+UPDATE `design_pattern`.`students` SET `student_name` = 'VSN' WHERE (`id` = '12');
+
+Please note that unlike Redis sets (SADD ie. self.client.sadd), MySQL tables do not automatically prevent you from inserting duplicate rows. If you want to prevent duplicates, you'll need to add a unique constraint or use a INSERT IGNORE or INSERT ... ON DUPLICATE KEY UPDATE statement.
+
+
+
+If you have Docker installed, you can run a Redis container. Here's the command to do so:
+docker run -p 6379:6379 --name some-redis -d redis
+
+The pattern is not an actual code but a template that can be used to solve problems in different situations. Especially while working with databases, it is often considered a good practice to follow a design pattern. This ensures easy switching between the databases in our applications. There are three types of database design patterns, they are:
+
+Object Relational Mapping (ORM)
+Entity-Attribute-Value (EAV) pattern
+Model-View-Controller (MVC) pattern.
+
+ORM’s function is to map the data represented in an object-oriented form to the database. DAO (Data Access Object) and DTO (Data Transfer Object) patterns are used in Object Relational Mapping. DAO acts as a bridge between the database and the application. DTO acts as a data store from where the data is received and transferred to different layers i.e., to the DAO application.
+
+In this article, we will look at DAO (Data Access Object) and DTO (Data Transfer Object), especially in Python. We will follow a practical approach to understand these concepts better.
+
+The Data Access Object (DAO) pattern is a design pattern that provides an abstraction layer between the application code and the underlying database. It aims to separate the concerns of data access and business logic, making the code more modular and maintainable.
+
+Here's a breakdown of what this means:
+
+Abstraction:
+
+The DAO pattern introduces an abstraction or an interface that defines a set of methods for performing various database operations (e.g., create, read, update, delete).
+Application code interacts with the DAO interface rather than directly with the database.
+Database Interaction:
+
+The actual implementation of the DAO contains the logic to interact with the database. It encapsulates the details of how data is stored, retrieved, updated, or deleted.
+The application code doesn't need to know the specific database technology or SQL queries used; it relies on the DAO to handle these details.
+Decoupling:
+
+By using the DAO pattern, the application becomes less dependent on the specific database implementation. If you switch from one database system to another, you only need to modify the DAO implementation, not the entire application.
+This decoupling simplifies maintenance and allows for easier testing and code changes.
+Modularity and Separation of Concerns:
+
+DAO promotes modularity by separating concerns. Business logic is focused on the application layer, while data access logic resides in the DAO layer.
+Changes to the database schema or SQL queries don't affect the rest of the application, provided the DAO interface remains unchanged.
+Reusability:
+
+The DAO pattern encourages the reuse of data access logic. Once you've defined a set of DAO interfaces and implementations, they can be reused across different parts of the application.
+Testing:
+
+The separation of concerns makes it easier to unit test the application. Mock implementations of the DAO can be used to test the application logic without interacting with a real database.
+In summary, the DAO pattern abstracts the details of database access, providing a clean interface for the application code. This abstraction improves maintainability, facilitates decoupling from specific database technologies, and promotes modularity and reusability in software design.
+
+The first step in writing the DAO class is defining the init method, where we specify the database connection that we want to use. As I’m using Redis, I create a Redis client in the init method. If you are using MySQL, then you would be using something like MySQL.connector.connect(user=’user’, password=’password’, host=’host’, database=’database’)
